@@ -4,8 +4,8 @@
 <title>AR.js A-Frame</title>
 <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
 <!-- Assumes AR.js build is in the 'AR.js' directory -->
-<script type='text/javascript' src='ar-threex-location-only.js'></script>
-<script type='text/javascript' src='aframe-ar.js'></script>
+<script type='text/javascript' src='../static/ar-threex-location-only.js'></script>
+<script type='text/javascript' src='../static/aframe-ar.js'></script>
 
 </head>
 <body>
@@ -18,13 +18,27 @@ degrees from your real location.
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
 
 	<a-camera look-controls-enabled='false' arjs-device-orientation-controls='smoothingFactor:0.2' gps-new-camera='gpsMinDistance: 5;'></a-camera>
-	<a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 59.918; longitude: 30.463" scale="10 10 10"></a-entity>
+	<!--<a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 59.918; longitude: 30.463" scale="10 10 10"></a-entity>-->
 	<a-plane color="white" position="0 -0.25 0" width="3" material="transparent: true; opacity: 0.90" gps-new-entity-place="latitude: 53.468; longitude: -2.233"></a-plane>
 
 	<!-- for more properties, see https://github.com/aframevr/aframe/blob/master/docs/components/text.md -->
-	<a-text value="Hello, world!" color="green" rotation="0 0 0" scale="40 40 40" gps-new-entity-place="latitude: 59.919; longitude: 30.463"></a-text>
+	<a-text id = 'name' value="Hello, world!" color="green" rotation="0 0 0" scale="40 40 40" gps-new-entity-place="latitude: 59.919; longitude: 30.463"></a-text>
 	
 </a-scene>
-	
+<script>
+	var value = 'Kilburn Building';
+            $.ajax({
+                url: '/building',
+                type: 'POST',
+                data: { 'data': value },
+                success: function(response) {
+                    document.getElementById('name').getAttribute("gps-new-entity-place") = response;
+					document.getElementById('name').value = value;
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+</script>
 </body>
 </html>
